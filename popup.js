@@ -2,8 +2,8 @@ var append = function(text){
   data.appendChild(document.createTextNode(text));
 }
 
-var download = function(format){
-  document.getElementById('content').innerText = "preparing file...";
+function getHistory () {
+  var deferred = Q.defer();
 
   chrome.history.search({
     'text': '', 
@@ -11,6 +11,41 @@ var download = function(format){
     'maxResults': 100000, 
     'startTime': 0
   }, function(res){
+    deferred.resolve(res);
+  });
+
+  return deferred.promise;
+}
+
+function getVisits (historyItem) {
+  var deferred = Q.defer();
+
+  chrome.history.getVisits({
+    url: historyItem.url
+  }, function (visits) {
+    historyItem.visits = visits;
+    deferred.resolve(historyItem);
+  });
+
+  return deferred.promise;
+}
+
+function getAllVisits(historyItems) {
+  var promiseArray = [];
+
+  for (var i = 0; i < historyItems.length; i++) {
+    promiseArray.push(getVisits(historyItems[i]));
+  }
+
+  return Q.all(promiseArray);
+}
+
+var download = function(format){
+  document.getElementById('content').innerText = "preparing file...";
+
+  getHistory()
+  .then(getAllVisits)
+  .then(function (res) {
     window.res = res;
 
     var text, filename;
@@ -53,7 +88,8 @@ var download = function(format){
     pom.click();
 
     window.close();
-  });
+  })
+  .done();
 }
 
 document.addEventListener('DOMContentLoaded', function () {

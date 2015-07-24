@@ -2,15 +2,19 @@
 
 A Chrome extension to export your history as csv or json.
 
+Forked edition retrieving visits information along with each history item.
+
 ## Usage
-
-[Download it](https://chrome.google.com/webstore/detail/export-history/hcohnnbbiggngobheobhdipbgmcbelhh) on the Chrome web store.
-
-## Contributing
 
 Clone this repository:
 
     $ git clone github.com:christiangenco/chrome-export-history.git
+
+and run
+
+    $ bower install
+
+to install the needed dependencies.
 
 Then visit the [extensions panel](chrome://extensions/) of your chrome settings, check `developer mode`, click `Load unpacked extension`, and select the directory you just cloned (for a more detailed explanation of these steps, visit Chrome's [Getting Started: Building a Chrome Extension](http://developer.chrome.com/extensions/getstarted) page).
 
